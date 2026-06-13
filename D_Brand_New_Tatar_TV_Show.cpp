@@ -12,33 +12,47 @@ typedef vector<int> vi;
 
 // ==================== Solve Function ====================
 void solve(){
-        int n,k;cin>>n>>k;
-        in(a,n);
-        map<int,int> mp;
-        fr(i,0,n) mp[a[i]]++;
-        int c = LLONG_MAX;
-        bool ans  = false;
-        for(auto it = mp.rbegin();it!=mp.rend();it++){
-           int a = it->first,b = it->second;
-           if(a <= c) {
-                if(b%2 == 0){
-                ans = true; break;
-                }
-                else{
-                c = a -k-1;
-                }}
-            else{
-                ans = true; break;}
-            }
-            if(ans) cout<<"YES"<<endl;
-            else cout<<"NO"<<endl;
-           }
+    int n, k; cin >> n >> k;
+    in(a, n);
+    sort(all(a));
+
+    for(int i = 0; i < n; ){
+        int j = i;
+        while(j < n && a[i] == a[j]) j++;
+        
+        int exact_count = j - i;
+        if(exact_count % 2 == 0){
+            cout << "YES\n";
+            return;
+        }
+        i = j;
+    }
+
+
+    for(int i = 0; i < n; ){
+
+        int j = upper_bound(all(a), a[i] + k) - a.begin();
+        int window_count = j - i;   
+
+        if(window_count % 2 == 0){
+            cout << "YES\n";
+            return;
+        }
+        
+        // Move i to the next distinct element
+        int next_i = i;
+        while(next_i < n && a[i] == a[next_i]) next_i++;
+        i = next_i;             
+    }
+
+    cout << "NO\n";
+}
 
 int32_t main() {
     fast;
     int t; cin >> t;
     while(t--){
-    solve();
+        solve();
     }
     return 0;
 }
